@@ -20,6 +20,6 @@ public class HttpClient {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response list(){
-        return service.getById("23");
+        return service.getById("http-server","23");
     }
 }
