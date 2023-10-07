@@ -13,5 +13,5 @@ import java.util.Set;
 public interface OrderService {
 
     @GET
-    Response getById(@HeaderParam("Dapr-App-Id") String daprAppId,@QueryParam("id") String id);
+    Response getById(@HeaderParam("dapr-app-id") String daprAppId,@QueryParam("id") String id);
 }

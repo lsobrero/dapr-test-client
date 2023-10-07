@@ -1,8 +1,7 @@
-name: Linux_Container_Workflow
+name: Deploy http-client to Azure Container Instances
 on:
   push:
-    branches: [ develop]
-
+    branches: [feature/dapr00]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -39,17 +38,17 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build --file src/main/docker/Dockerfile.jvm . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/dapr-test-server:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/dapr-test-server:${{ github.sha }}
+          docker build --file src/main/docker/Dockerfile.jvm . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/dapr-test-client:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/dapr-test-client:${{ github.sha }}
 
       - name: 'Deploy to Azure Container Instances'
         uses: 'azure/aci-deploy@v1'
         with:
           resource-group: ${{ secrets.RESOURCE_GROUP }}
           dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/dapr-test-server:${{ github.sha }}
+          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/dapr-test-client:${{ github.sha }}
           registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          name: aci-dapr-test-server
+          name: aci-dapr-test-client
           location: 'west europe'

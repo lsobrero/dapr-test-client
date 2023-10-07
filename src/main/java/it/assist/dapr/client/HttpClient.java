@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-@Path("/http/client")
+@Path("/order")
 public class HttpClient {
 
     @RestClient
