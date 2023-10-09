@@ -20,7 +20,7 @@ param serviceBusTopicName string
 param serviceBusTopicAuthorizationRuleName string
 
 @description('The name of the service for the finecollection service. The name is used as Dapr App ID and as the name of service bus topic subscription.')
-param finecollectionServiceName string
+param httpClientServiceName string
 
 // ------------------
 // RESOURCES
@@ -53,7 +53,7 @@ resource serviceBusTopicAuthRule 'Microsoft.ServiceBus/namespaces/topics/authori
 }
 
 resource serviceBusTopicSubscription 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2022-10-01-preview' = {
-  name: finecollectionServiceName
+  name: httpClientServiceName
   parent: serviceBusTopic
 }
 

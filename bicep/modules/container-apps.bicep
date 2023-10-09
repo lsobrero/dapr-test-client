@@ -108,7 +108,7 @@ module applicationInsightsSecret 'secrets/app-insights-secrets.bicep' = {
 
 
 module httpClientService 'container-apps/http-client-service.bicep' = {
-  name: 'trafficsimulationService-${uniqueString(resourceGroup().id)}'
+  name: 'httpClientService-${uniqueString(resourceGroup().id)}'
   params: {
     location: location
     tags: tags
@@ -130,7 +130,7 @@ module httpClientService 'container-apps/http-client-service.bicep' = {
 }
 
 module httpServerService 'container-apps/http-server-service.bicep' = {
-  name: 'trafficsimulationService-${uniqueString(resourceGroup().id)}'
+  name: 'httpServerService-${uniqueString(resourceGroup().id)}'
   params: {
     httpServerServiceName: httpServerServiceName
     location: location

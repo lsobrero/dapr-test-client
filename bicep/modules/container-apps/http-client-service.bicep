@@ -151,11 +151,14 @@ resource httpClientService 'Microsoft.App/containerApps@2023-05-01' = {
         }
       ] : []
     }
+/*
+sbrllbacr01.azurecr.io/dapr-test-client:21a6582324e57e5a3d48f24a77360ea0d0727d8a
+*/
     template: {
       containers: [
         {
           name: httpClientServiceName
-          image: buildHttpClient.outputs.acrImage
+          image: 'dapr-test-client:21a6582324e57e5a3d48f24a77360ea0d0727d8a'
           resources: {
             cpu: json('0.25')
             memory: '0.5Gi'
