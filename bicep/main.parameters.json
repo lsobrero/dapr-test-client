@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "secretStoreComponentName": {
+        "value": "secretstoreakv"
+      },
+      "httpClientServiceName": {
+        "value": "http-client"
+      },
+      "httpServerServiceName": {
+        "value": "http-server"
+      },
+      "serviceBusTopicName": {
+        "value": "http-orders"
+      },
+      "serviceBusTopicAuthorizationRuleName": {
+        "value": "http-orders-manage-policy"
+      },
+      "cosmosDbDatabaseName": {
+        "value": "http-db"
+      },
+      "cosmosDbCollectionName": {
+        "value": "http-orderss"
+      },
+      "applicationInsightsSecretName": {
+        "value": "appinsights-key"
+      },
+      "useActors": {
+        "value": false
+      }
+    }
+  }
