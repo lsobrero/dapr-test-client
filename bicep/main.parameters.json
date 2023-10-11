@@ -9,7 +9,7 @@
         "value": ""
       },
       "containerRegistryName": {
-        "value": "sbrllbacr01.azurecr.io"
+        "value": "sbrllbacr01"
       },
       "httpClientServiceName": {
         "value": "http-client"
