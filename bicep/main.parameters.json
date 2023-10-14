@@ -1,48 +1,27 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "prefix": {
-        "value": ""
-      },
-      "suffix": {
-        "value": ""
-      },
-      "containerRegistryName": {
-        "value": "sbrllbacr01"
-      },
-      "httpClientServiceName": {
-        "value": "http-client"
-      },
-      "httpServerPortNumber": {
-        "value": 8081
-      },
-      "httpClientPortNumber": {
-        "value": 8080
-      },
-      "secretStoreComponentName": {
-        "value": "secretstoreakv"
-      },
-      "httpServerServiceName": {
-        "value": "http-server"
-      },
-      "serviceBusTopicName": {
-        "value": "http-orders"
-      },
-      "serviceBusTopicAuthorizationRuleName": {
-        "value": "http-orders-manage-policy"
-      },
-      "cosmosDbDatabaseName": {
-        "value": "http-db"
-      },
-      "cosmosDbCollectionName": {
-        "value": "http-orderss"
-      },
-      "applicationInsightsSecretName": {
-        "value": "appinsights-key"
-      },
-      "useActors": {
-        "value": false
-      }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerRegistryName": {
+      "value": "sbrllbacr01.azurecr.io"
+    },
+    "secretStoreComponentName": {
+      "value": "secretstoreakv"
+    },
+    "httpServerServiceName": {
+      "value": "http-server"
+    },
+    "httpClientServiceName": {
+      "value": "http-client"
+    },
+    "containerImage": {
+      "value": "sbrllbacr01.azurecr.io/dapr-test-client:21a6582324e57e5a3d48f24a77360ea0d0727d8a"
+    },
+    "containerRegistryUsername": {
+      "value": "sbrllbacr01"
+    },
+    "containerRegistryPassword": {
+      "value": "+WoFSQV9jaBWOg1mu7DqE/YcfQsCT3m408bJigqd6G+ACRDdykVK"
     }
   }
+}

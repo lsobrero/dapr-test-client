@@ -24,6 +24,14 @@ param httpClientServiceName string
 @description('The name of the container registry.')
 param containerRegistryName string
 
+@description('The name of the image.')
+param containerImage string
+@description('The registry username.')
+param containerRegistryUsername string
+@description('The registry user password.')
+@secure()
+param containerRegistryPassword string
+
 // App Ports
 @description('The dapr port for the http-server service.')
 param httpServerPortNumber int
@@ -47,10 +55,9 @@ var containerRegistryPullRoleGuid='7f951dda-4ed3-4680-a7ca-43fe172d538d'
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-05-01' existing = {
   name: containerAppsEnvironmentName
 }
-//Reference to AppInsights resource
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' existing = {
-  name: containerRegistryName
+  name: '${containerRegistryName}.azurecr.io'
 }
 
 resource containerUserAssignedManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
@@ -59,6 +66,7 @@ resource containerUserAssignedManagedIdentity 'Microsoft.ManagedIdentity/userAss
   tags: tags
 }
 
+/*
 resource containerRegistryPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = if(!empty(containerRegistryName)) {
   name: guid(subscription().id, containerRegistry.id, containerUserAssignedManagedIdentity.id) 
   scope: containerRegistry
@@ -68,7 +76,7 @@ resource containerRegistryPullRoleAssignment 'Microsoft.Authorization/roleAssign
     principalType: 'ServicePrincipal'
   }
 }
-
+*/
 
 module httpClientService 'container-apps/http-client-service.bicep' = {
   name: 'httpClientService-${uniqueString(resourceGroup().id)}'
@@ -79,9 +87,11 @@ module httpClientService 'container-apps/http-client-service.bicep' = {
     httpClientServiceName: httpClientServiceName
     httpClientPortNumber: httpClientPortNumber
     containerRegistryName: containerRegistryName
+    containerImage: containerImage
+    containerRegistryUsername: containerRegistryUsername
+    containerRegistryPassword: containerRegistryPassword
     containerUserAssignedManagedIdentityId: containerUserAssignedManagedIdentity.id
     useActors: useActors
-    
   }
 }
 
@@ -93,8 +103,12 @@ module httpServerService 'container-apps/http-server-service.bicep' = {
     tags: tags
     containerAppsEnvironmentId: containerAppsEnvironment.id
     containerRegistryName: containerRegistryName
+    containerImage: containerImage
+    containerRegistryUsername: containerRegistryUsername
+    containerRegistryPassword: containerRegistryPassword
     containerUserAssignedManagedIdentityId: containerUserAssignedManagedIdentity.id
     httpServerPortNumber: httpServerPortNumber
+    useActors: useActors
   }
 }
 
@@ -112,3 +126,4 @@ output httpClientServiceContainerAppName string = httpClientService.name
 
 @description('The name of the container app for the http-server service.')
 output httpServerServiceContainerAppName string = httpServerService.name
+

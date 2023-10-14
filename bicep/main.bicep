@@ -48,6 +48,16 @@ param httpServerServiceName string
 @description('The name of the service for the http-client service. The name is use as Dapr App ID.')
 param httpClientServiceName string
 
+// Container registry
+
+@description('The name of the image.')
+param containerImage string
+@description('The registry username.')
+param containerRegistryUsername string
+@description('The registry user password.')
+@secure()
+param containerRegistryPassword string
+
 
 // App Ports
 
@@ -90,14 +100,6 @@ module daprComponents 'modules/dapr-components.bicep' = {
   ]
 }
 
-module acr 'modules/container-registry.bicep' = {
-  name: 'acr-${uniqueString(resourceGroup().id)}'
-  params: {
-    acrName: 'acr${uniqueString(resourceGroup().id)}'
-    location: location
-    tags: tags
-  }
-}
 
 module containerApps 'modules/container-apps.bicep' = {
   name: 'containerApps-${uniqueString(resourceGroup().id)}'
@@ -108,6 +110,9 @@ module containerApps 'modules/container-apps.bicep' = {
     httpClientServiceName: httpClientServiceName
     containerAppsEnvironmentName: containerAppsEnvironmentName
     containerRegistryName: containerRegistryName
+    containerImage: containerImage
+    containerRegistryUsername: containerRegistryUsername
+    containerRegistryPassword: containerRegistryPassword
     httpServerPortNumber: httpServerPortNumber
     httpClientPortNumber: httpClientPortNumber
     useActors: useActors
@@ -121,10 +126,10 @@ module containerApps 'modules/container-apps.bicep' = {
 // ------------------
 // OUTPUTS
 // ------------------
-
+/*
 @description('The name of the container app for the http-client service.')
-output trafficcontrolServiceContainerAppName string = containerApps.outputs.httpClientServiceContainerAppName
+output httpClientServiceContainerAppName string = containerApps.outputs.httpClientServiceContainerAppName
 
 @description('The name of the container app for the http-server service.')
-output finecollectionServiceContainerAppName string = containerApps.outputs.httpServerServiceContainerAppName
-
+output httpServerServiceContainerAppName string = containerApps.outputs.httpServerServiceContainerAppName
+*/

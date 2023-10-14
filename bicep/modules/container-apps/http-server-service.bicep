@@ -26,23 +26,23 @@ param containerRegistryName string
 @description('The resource ID of the user assigned managed identity for the container registry to be able to pull images from it.')
 param containerUserAssignedManagedIdentityId string
 
+param containerRegistryUsername string
 
-// ------------------
-// MODULES
-// ------------------
-
-module buildHttpServer 'br/public:deployment-scripts/build-acr:2.0.1' = {
-  name: httpServerServiceName
-  params: {
-    AcrName: containerRegistryName
-    location: location
-    gitRepositoryUrl:  'https://github.com/mbn-ms-dk/DaprTrafficControl.git'
-    dockerfileDirectory: 'FineCollectionService'
-    imageName: 'dtc/finecollection'
-    imageTag: 'latest'
-    cleanupPreference: 'Always'
+@secure()
+param containerRegistryPassword string
+param secrets array = [
+  {
+    name: 'acr-password'
+    value: containerRegistryPassword
   }
-}
+]
+var registrySecretRefName = 'acr-password'
+
+param containerImage string
+
+@description('Use actors in traffic control service')
+param useActors bool
+
 
 // ------------------
 // RESOURCES
@@ -75,12 +75,12 @@ resource httpServerService 'Microsoft.App/containerApps@2023-05-01' = {
         logLevel: 'info'
         enableApiLogging: true
       }
-      secrets: [
-      ]
+      secrets: secrets
       registries: !empty(containerRegistryName) ? [
         {
-          server: '${containerRegistryName}.azurecr.io'
-          identity: containerUserAssignedManagedIdentityId
+          server: containerRegistryName
+          username: containerRegistryUsername
+          passwordSecretRef: registrySecretRefName
         }
       ] : []
     }
@@ -88,12 +88,16 @@ resource httpServerService 'Microsoft.App/containerApps@2023-05-01' = {
       containers: [
         {
           name: httpServerServiceName
-          image: buildHttpServer.outputs.acrImage
+          image: 'sbrllbacr01.azurecr.io/dapr-test-server:711e9498569f61f22b2c66d1e72fe7817f7fc51c'
           resources: {
             cpu: json('0.25')
             memory: '0.5Gi'
           }
           env: [
+            {
+              name: 'USE_ACTORS'
+              value: '${useActors}'
+            }
           ]
         }
       ]
